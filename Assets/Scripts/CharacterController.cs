@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterController : MonoBehaviour
 {
+    private PlayerInput playerInput;
     public Sprite dino;
     private SpriteRenderer spriteRenderer;
     [SerializeField]
@@ -16,6 +18,7 @@ public class CharacterController : MonoBehaviour
 
     private void Awake(){
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        playerInput = gameObject.GetComponent<PlayerInput>();
     }
 
     // Start is called before the first frame update
@@ -42,4 +45,37 @@ public class CharacterController : MonoBehaviour
             spriteRenderer.flipX = false;
         }
     }
+
+    //Invoke c# events
+    // private void OnEnable(){
+    //     playerInput.onActionTriggered += When_onActionTriggered;
+    // }
+
+    // private void When_onActionTriggered(InputAction.CallbackContext ctx){
+    //     Debug.Log(ctx);
+
+    //     if (ctx.action.name == "Jump"){
+    //         if (ctx.phase == InputActionPhase.Performed){
+    //             Debug.Log("performed");
+    //         }
+    //     }
+    // }
+
+    //Send / Broadcast message
+    // private void OnJump(InputValue value){
+    //     float jumpValue = value.Get<float>();
+    //     Debug.Log("Jumped");
+    // }
+
+    //Invoke Unity Events
+    // public void OnJump(InputAction.CallbackContext ctx){
+    //     Debug.Log(ctx);
+    //
+    //     if (ctx.phase == InputActionPhase.Performed){
+    //         Debug.Log("Jump performed");
+    //     }
+    // }
+
+
+
 }
