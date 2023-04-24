@@ -68,13 +68,13 @@ public class CharacterController : MonoBehaviour
     // }
 
     //Invoke Unity Events
-    // public void OnJump(InputAction.CallbackContext ctx){
-    //     Debug.Log(ctx);
-    //
-    //     if (ctx.phase == InputActionPhase.Performed){
-    //         Debug.Log("Jump performed");
-    //     }
-    // }
+    public void OnJump(InputAction.CallbackContext ctx){
+        Debug.Log(ctx);
+    
+        if (ctx.phase == InputActionPhase.Performed){
+            Debug.Log("Jump performed");
+        }
+    }
 
 
 
