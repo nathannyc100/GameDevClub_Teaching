@@ -10,40 +10,46 @@ public class CharacterController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField]
     private Animator animator;
+    private InputController inputController;
+    private Rigidbody2D rigidbody;
 
     private float horizontalMovement;
     private float verticalMovement;
 
     private Vector3 movementVector;
 
+    public int speed;
+
     private void Awake(){
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         playerInput = gameObject.GetComponent<PlayerInput>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        inputController = gameObject.GetComponent<InputController>();
+        rigidbody = gameObject.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update(){
-        horizontalMovement = Input.GetAxis("Horizontal");
-        verticalMovement = Input.GetAxis("Vertical");
+        // horizontalMovement = Input.GetAxis("Horizontal");
+        // verticalMovement = Input.GetAxis("Vertical");
 
-        animator.SetFloat("XAxis", Mathf.Abs(horizontalMovement));
-        animator.SetFloat("YAxis", verticalMovement);
+        // animator.SetFloat("XAxis", Mathf.Abs(horizontalMovement));
+        // animator.SetFloat("YAxis", verticalMovement);
 
-        movementVector = new Vector3(horizontalMovement, verticalMovement, 0);
+        // movementVector = new Vector3(horizontalMovement, verticalMovement, 0);
 
-        transform.Translate(movementVector * Time.deltaTime * 10);
+        //transform.Translate(movementVector * Time.deltaTime * 10);
 
-        if (movementVector.x < 0){
+        
+
+        if (rigidbody.velocity.x < 0){
             spriteRenderer.flipX = true;
-        } else if (movementVector.x > 0) {
+        } else if (rigidbody.velocity.x > 0) {
             spriteRenderer.flipX = false;
         }
+    }
+
+    void FixedUpdate(){
+        rigidbody.velocity = inputController.velocity * speed;
     }
 
     //Invoke c# events
@@ -73,6 +79,12 @@ public class CharacterController : MonoBehaviour
     
         if (ctx.phase == InputActionPhase.Performed){
             Debug.Log("Jump performed");
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision){
+        if (collision.gameObject.tag == "Wall"){
+            Debug.Log("Bumped into wall");
         }
     }
 
