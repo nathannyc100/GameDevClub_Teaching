@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class CharacterController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private InputController inputController;
     private Rigidbody2D rigidbody;
+    public GameObject bullet;
 
     private float horizontalMovement;
     private float verticalMovement;
@@ -25,6 +27,8 @@ public class CharacterController : MonoBehaviour
         playerInput = gameObject.GetComponent<PlayerInput>();
         inputController = gameObject.GetComponent<InputController>();
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
+
+        inputController.OnFired += When_OnFired;
     }
 
     // Update is called once per frame
@@ -86,6 +90,10 @@ public class CharacterController : MonoBehaviour
         if (collision.gameObject.tag == "Wall"){
             Debug.Log("Bumped into wall");
         }
+    }
+
+    private void When_OnFired(object sender, EventArgs e){
+        Instantiate(bullet, rigidbody.position, Quaternion.identity);
     }
 
 
