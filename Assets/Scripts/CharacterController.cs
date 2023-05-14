@@ -13,7 +13,9 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private InputController inputController;
     private Rigidbody2D rigidbody;
-    public GameObject bullet;
+    public Rigidbody2D bullet;
+    [SerializeField]
+    private Camera mainCamera;
 
     private float horizontalMovement;
     private float verticalMovement;
@@ -51,6 +53,8 @@ public class CharacterController : MonoBehaviour
             spriteRenderer.flipX = false;
         }
     }
+
+    
 
     void FixedUpdate(){
         rigidbody.velocity = inputController.velocity * speed;
@@ -93,7 +97,17 @@ public class CharacterController : MonoBehaviour
     }
 
     private void When_OnFired(object sender, EventArgs e){
-        Instantiate(bullet, rigidbody.position, Quaternion.identity);
+        Rigidbody2D bulletRigidbody = Instantiate(bullet, rigidbody.position, Quaternion.identity);
+
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition.z = 0;
+        mousePosition = mainCamera.ScreenToWorldPoint(mousePosition);
+
+        Vector3 dinoPosition = rigidbody.position;
+        Vector2 shootDirection = (mousePosition - dinoPosition);
+        shootDirection = shootDirection.normalized;
+
+        bulletRigidbody.GetComponent<Bullet>().Setup(shootDirection);
     }
 
 

@@ -10,11 +10,9 @@ public class Enemy : MonoBehaviour
         health = 100;
     }
 
-    private void OnTriggerEnter(Collider collider) {
-        if (collider.gameObject.tag == "Bullet"){
-            health -= 10;
-
-            Debug.Log("Health decreased, health: " + health);
+    private void Update(){ 
+        if (health <= 0){ 
+            Destroy(gameObject);
         }
     }
 }
