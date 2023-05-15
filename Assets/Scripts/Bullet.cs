@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Vector3 shootDirection;
+    private Vector2 shootDirection;
     private float speed = 10;
     private Rigidbody2D rigidbody;
 
-    public void Setup(Vector3 shootDirection)
+    public void Setup(Vector2 shootDirection)
     {
         this.shootDirection = shootDirection; 
         this.rigidbody = GetComponent<Rigidbody2D>();

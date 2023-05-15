@@ -13,9 +13,11 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private InputController inputController;
     private Rigidbody2D rigidbody;
-    public Rigidbody2D bullet;
+    [SerializeField]
+    private Bullet bullet;
     [SerializeField]
     private Camera mainCamera;
+    
 
     private float horizontalMovement;
     private float verticalMovement;
@@ -97,17 +99,16 @@ public class CharacterController : MonoBehaviour
     }
 
     private void When_OnFired(object sender, EventArgs e){
-        Rigidbody2D bulletRigidbody = Instantiate(bullet, rigidbody.position, Quaternion.identity);
+        Bullet bulletInstance = Instantiate(bullet, rigidbody.position, Quaternion.identity);
 
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = 0;
+        Vector2 mousePosition = Input.mousePosition;
         mousePosition = mainCamera.ScreenToWorldPoint(mousePosition);
 
-        Vector3 dinoPosition = rigidbody.position;
+        Vector2 dinoPosition = rigidbody.position;
         Vector2 shootDirection = (mousePosition - dinoPosition);
         shootDirection = shootDirection.normalized;
 
-        bulletRigidbody.GetComponent<Bullet>().Setup(shootDirection);
+        bulletInstance.Setup(shootDirection);
     }
 
 
