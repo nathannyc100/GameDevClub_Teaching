@@ -17,6 +17,9 @@ public class CharacterController : MonoBehaviour
     private Bullet bullet;
     [SerializeField]
     private Camera mainCamera;
+
+    public Vector2 position;
+    public int health;
     
 
     private float horizontalMovement;
@@ -33,6 +36,8 @@ public class CharacterController : MonoBehaviour
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
 
         inputController.OnFired += When_OnFired;
+
+        health = 100;
     }
 
     // Update is called once per frame
@@ -60,6 +65,8 @@ public class CharacterController : MonoBehaviour
 
     void FixedUpdate(){
         rigidbody.velocity = inputController.velocity * speed;
+
+        position = rigidbody.position;
     }
 
     //Invoke c# events
@@ -109,6 +116,12 @@ public class CharacterController : MonoBehaviour
         shootDirection = shootDirection.normalized;
 
         bulletInstance.Setup(shootDirection);
+    }
+
+    public void DecreaseHealth(int amount){
+        health -= amount;
+
+        Debug.Log(health);
     }
 
 
