@@ -7,15 +7,29 @@ public class GameManager : MonoBehaviour
     private CharacterController characterController;
     [SerializeField]
     private Enemy enemy;
+    [SerializeField]
+    private GameObject[] spawnPositions;
+    public List<GameObject> enemies;
 
-    private int enemyCount;
+    public int score;
     private float spawnDistance;
 
     private void Awake(){
         characterController = FindObjectOfType<CharacterController>();
     }
 
-    public void SpawnEnemies(){
-
+    private void Update(){
+        if (enemies.Count == 0){
+            SpawnEnemies();
+        }
     }
+
+    public void SpawnEnemies(){
+        foreach (GameObject spawnPoints in spawnPositions){
+            Enemy instantiatedEnemy  = Instantiate(enemy, spawnPoints.transform.position, Quaternion.identity);
+            enemies.Add(instantiatedEnemy.gameObject);
+        }
+    }
+
+
 }
