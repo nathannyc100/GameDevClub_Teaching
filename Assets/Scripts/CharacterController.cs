@@ -12,7 +12,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private Animator animator;
     private InputController inputController;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rigidbodyComponent;
     [SerializeField]
     private Bullet bullet;
     [SerializeField]
@@ -38,7 +38,7 @@ public class CharacterController : MonoBehaviour
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         playerInput = gameObject.GetComponent<PlayerInput>();
         inputController = gameObject.GetComponent<InputController>();
-        rigidbody = gameObject.GetComponent<Rigidbody2D>();
+        rigidbodyComponent = gameObject.GetComponent<Rigidbody2D>();
         gameManager = FindObjectOfType<GameManager>();  
 
         inputController.OnFired += When_OnFired;
@@ -51,21 +51,9 @@ public class CharacterController : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
-        // horizontalMovement = Input.GetAxis("Horizontal");
-        // verticalMovement = Input.GetAxis("Vertical");
-
-        // animator.SetFloat("XAxis", Mathf.Abs(horizontalMovement));
-        // animator.SetFloat("YAxis", verticalMovement);
-
-        // movementVector = new Vector3(horizontalMovement, verticalMovement, 0);
-
-        //transform.Translate(movementVector * Time.deltaTime * 10);
-
-        
-
-        if (rigidbody.velocity.x < 0){
+        if (rigidbodyComponent.velocity.x < 0){
             spriteRenderer.flipX = true;
-        } else if (rigidbody.velocity.x > 0) {
+        } else if (rigidbodyComponent.velocity.x > 0) {
             spriteRenderer.flipX = false;
         }
 
@@ -77,58 +65,27 @@ public class CharacterController : MonoBehaviour
     
 
     void FixedUpdate(){
-        rigidbody.velocity = inputController.velocity * speed;
+        rigidbodyComponent.velocity = inputController.velocity * speed;
 
-        position = rigidbody.position;
+        position = rigidbodyComponent.position;
     }
-
-    //Invoke c# events
-    // private void OnEnable(){
-    //     playerInput.onActionTriggered += When_onActionTriggered;
-    // }
-
-    // private void When_onActionTriggered(InputAction.CallbackContext ctx){
-    //     Debug.Log(ctx);
-
-    //     if (ctx.action.name == "Jump"){
-    //         if (ctx.phase == InputActionPhase.Performed){
-    //             Debug.Log("performed");
-    //         }
-    //     }
-    // }
-
-    //Send / Broadcast message
-    // private void OnJump(InputValue value){
-    //     float jumpValue = value.Get<float>();
-    //     Debug.Log("Jumped");
-    // }
-
-    //Invoke Unity Events
-    //public void OnJump(InputAction.CallbackContext ctx){
-    //    Debug.Log(ctx);
-    
-    //    if (ctx.phase == InputActionPhase.Performed){
-    //    }
-    //}
 
     private void OnCollisionEnter2D(Collision2D collision){
         if (collision.gameObject.tag == "Wall"){
         }
     }
 
-    private void When_OnFired(object sender, EventArgs e)
-    {
-        if (Time.time - bulletTimer < bulletInterval)
-        {
+    private void When_OnFired(object sender, EventArgs e){
+        if (Time.time - bulletTimer < bulletInterval){
             return;
         }
 
-        if (fireToggle)
-        {
+        if (fireToggle){
             return;
         }
 
         FireBullet();
+    
     }
 
     public void DecreaseHealth(int amount){
@@ -146,29 +103,25 @@ public class CharacterController : MonoBehaviour
     }
 
     private void FireBullet(){
-        Bullet bulletInstance = Instantiate(bullet, rigidbody.position, Quaternion.identity);
+        Bullet bulletInstance = Instantiate(bullet, rigidbodyComponent.position, Quaternion.identity);
 
-        Vector2 dinoPosition = rigidbody.position;
+        Vector2 dinoPosition = rigidbodyComponent.position;
         Vector2 shootDirection;
 
         if (aimToggle){
             shootDirection = new Vector2(1000, 1000);
 
-            foreach (GameObject enemy in gameManager.enemies)
-            {
+            foreach (GameObject enemy in gameManager.enemies){
                 Vector2 enemyPosition = enemy.transform.position;
-
                 Vector2 nextShootDirection = (enemyPosition - dinoPosition);
-                if (nextShootDirection.magnitude < shootDirection.magnitude)
-                {
+
+                if (nextShootDirection.magnitude < shootDirection.magnitude){
                     shootDirection = nextShootDirection;
                 }
-
             }
         } else {
             Vector2 mousePosition = Input.mousePosition;
             mousePosition = mainCamera.ScreenToWorldPoint(mousePosition);
-
             shootDirection = (mousePosition - dinoPosition);
         }
         

@@ -7,13 +7,13 @@ public class Bullet : MonoBehaviour
 {
     private Vector2 shootDirection;
     private float speed = 10;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rigidbodyComponent;
 
     public void Setup(Vector2 shootDirection)
     {
         this.shootDirection = shootDirection; 
-        this.rigidbody = GetComponent<Rigidbody2D>();
-        rigidbody.velocity = shootDirection * speed;
+        this.rigidbodyComponent = GetComponent<Rigidbody2D>();
+        rigidbodyComponent.velocity = shootDirection * speed;
         
     }
     
